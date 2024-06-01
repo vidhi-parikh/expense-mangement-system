@@ -1,7 +1,7 @@
 const express = require('express');
 const connectDB = require('./services/db_service');
 const dotenv = require('dotenv');
-const logger = require('./services/logger');
+const logger = require('./services/logger_service');
 
 dotenv.config();
 connectDB();
