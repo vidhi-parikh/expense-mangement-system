@@ -24,3 +24,20 @@ exports.getExpenses = async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.updateExpense = async (req, res) => {
+    const { amount, category, description } = req.body;
+    try {
+      const expense = await Expense.findById(req.params.id);
+      if (!expense || expense.user.toString() !== req.user.id) {
+        return res.status(404).json({ error: 'Expense not found' });
+      }
+      expense.amount = amount;
+      expense.category = category;
+      expense.description = description;
+      await expense.save();
+      res.status(200).json(expense);
+    } catch (err) {
+      res.status(500).json({ error: 'Server error' });
+    }
+};

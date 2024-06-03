@@ -1,7 +1,8 @@
 const express = require('express');
 const {
   createExpense,
-  getExpenses
+  getExpenses,
+  updateExpense
 } = require('../controllers/expenseController');
 const { protect } = require('../middlewares/authMiddleware');
 
@@ -11,5 +12,7 @@ router.route('/')
   .post(protect, createExpense)
   .get(protect, getExpenses);
 
+  router.route('/:id')
+  .put(protect, updateExpense)
 
 module.exports = router;
