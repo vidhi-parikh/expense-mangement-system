@@ -41,3 +41,16 @@ exports.updateExpense = async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.deleteExpense = async (req, res) => {
+    try {
+      const expense = await Expense.findById(req.params.id);
+      if (!expense || expense.user.toString() !== req.user.id) {
+        return res.status(404).json({ error: 'Expense not found' });
+      }
+      await expense.deleteOne()
+      res.status(200).json({ message: 'Expense removed' });
+    } catch (err) {
+      res.status(500).json({ error: 'Server error' });
+    }
+};
