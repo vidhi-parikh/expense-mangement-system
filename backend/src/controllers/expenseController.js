@@ -1,4 +1,5 @@
 const Expense = require('../models/Expense');
+const logger = require('../services/logger_service');
 
 exports.createExpense = async (req, res) => {
     const { amount, category, description } = req.body;
