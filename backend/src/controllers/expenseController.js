@@ -65,3 +65,32 @@ exports.deleteExpense = async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.getTotalExpensesByCategory = async (req, res) => {
+    try {
+      const totalExpenses = await Expense.aggregate([
+        {
+          $match: { user: req.user._id },
+        },
+        {
+          $group: {
+            _id: '$category',
+            totalAmount: { $sum: '$amount' },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            category: '$_id',
+            totalAmount: 1,
+          },
+        },
+      ]);
+  
+      logger.info('Total expenses by category retrieved successfully', { userId: req.user.id });
+      res.status(200).json(totalExpenses);
+    } catch (err) {
+      logger.error('Error retrieving total expenses by category', { error: err.message, stack: err.stack });
+      res.status(500).json({ error: 'Server error' });
+    }
+};
